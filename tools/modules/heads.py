@@ -367,6 +367,8 @@ class DetectV8(nn.Module):
 
         self.cv2 = old_detect.cv2
         self.cv3 = old_detect.cv3
+        self.cv4 = old_detect.cv4
+        self.cv5 = old_detect.cv5
         self.f = old_detect.f
         self.i = old_detect.i
 
@@ -402,8 +404,12 @@ class DetectV8(nn.Module):
                     (cls_output.shape[0], 1, cls_output.shape[2], cls_output.shape[3]),
                     device=cls_output.device,
                 )
+                
+            ang = self.cv4[i](x[i])
 
-            output = torch.cat([box, conf, cls_output], axis=1)
+            dep = self.cv5[i](x[i])
+
+            output = torch.cat([box, conf, cls_output, ang, dep], axis=1)
             outputs.append(output)
 
         return outputs
